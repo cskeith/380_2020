@@ -12,15 +12,15 @@ CREATE TABLE user_roles (
     FOREIGN KEY (username) REFERENCES users(username)
 );
 
-INSERT INTO users VALUES ('keith', 'keithpw');
+INSERT INTO users VALUES ('keith', '{noop}keithpw');
 INSERT INTO user_roles(username, role) VALUES ('keith', 'ROLE_USER');
 INSERT INTO user_roles(username, role) VALUES ('keith', 'ROLE_ADMIN');
 
-INSERT INTO users VALUES ('tsli', 'tslipw');
-INSERT INTO user_roles(username, role) VALUES ('tsli', 'ROLE_ADMIN');
+INSERT INTO users VALUES ('vanessa', '{noop}vanessapw');
+INSERT INTO user_roles(username, role) VALUES ('vanessa', 'ROLE_ADMIN');
 
-INSERT INTO users VALUES ('kevin', 'kevinpw');
+INSERT INTO users VALUES ('kevin', '{noop}kevinpw');
 INSERT INTO user_roles(username, role) VALUES ('kevin', 'ROLE_USER');
 
-INSERT INTO users VALUES ('oliver', 'oliverpw');
+INSERT INTO users VALUES ('oliver', '{noop}oliverpw');
 INSERT INTO user_roles(username, role) VALUES ('oliver', 'ROLE_USER');
