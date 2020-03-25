@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,19 +20,19 @@ import ouhk.comps380f.model.Ticket;
 import ouhk.comps380f.view.DownloadingView;
 
 @Controller
-@RequestMapping("ticket")
+@RequestMapping("/ticket")
 public class TicketController {
 
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Ticket> ticketDatabase = new Hashtable<>();
 
-    @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
+    @GetMapping({"", "/list"})
     public String list(ModelMap model) {
         model.addAttribute("ticketDatabase", ticketDatabase);
         return "list";
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.GET)
+    @GetMapping("/create")
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
     }
@@ -76,7 +78,7 @@ public class TicketController {
 
     }
 
-    @RequestMapping(value = "create", method = RequestMethod.POST)
+    @PostMapping("/create")
     public View create(Form form) throws IOException {
         Ticket ticket = new Ticket();
         ticket.setId(this.getNextTicketId());
@@ -102,7 +104,7 @@ public class TicketController {
         return this.TICKET_ID_SEQUENCE++;
     }
 
-    @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
+    @GetMapping("/view/{ticketId}")
     public String view(@PathVariable("ticketId") long ticketId,
             ModelMap model) {
         Ticket ticket = this.ticketDatabase.get(ticketId);
@@ -114,10 +116,7 @@ public class TicketController {
         return "view";
     }
 
-    @RequestMapping(
-            value = "/{ticketId}/attachment/{attachment:.+}",
-            method = RequestMethod.GET
-    )
+    @GetMapping("/{ticketId}/attachment/{attachment:.+}")
     public View download(@PathVariable("ticketId") long ticketId,
             @PathVariable("attachment") String name) {
         Ticket ticket = this.ticketDatabase.get(ticketId);
@@ -131,10 +130,7 @@ public class TicketController {
         return new RedirectView("/ticket/list", true);
     }
 
-    @RequestMapping(
-            value = "/{ticketId}/delete/{attachment:.+}",
-            method = RequestMethod.GET
-    )
+    @GetMapping("/{ticketId}/delete/{attachment:.+}")
     public String deleteAttachment(@PathVariable("ticketId") long ticketId,
             @PathVariable("attachment") String name) {
         Ticket ticket = this.ticketDatabase.get(ticketId);
@@ -146,7 +142,7 @@ public class TicketController {
         return "redirect:/ticket/edit/" + ticketId;
     }
 
-    @RequestMapping(value = "edit/{ticketId}", method = RequestMethod.GET)
+    @GetMapping("/edit/{ticketId}")
     public ModelAndView showEdit(@PathVariable("ticketId") long ticketId) {
         Ticket ticket = this.ticketDatabase.get(ticketId);
         if (ticket == null) {
@@ -165,7 +161,7 @@ public class TicketController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "edit/{ticketId}", method = RequestMethod.POST)
+    @PostMapping("/edit/{ticketId}")
     public String edit(@PathVariable("ticketId") long ticketId, Form form)
             throws IOException {
         Ticket ticket = this.ticketDatabase.get(ticketId);
@@ -187,7 +183,7 @@ public class TicketController {
         return "redirect:/ticket/view/" + ticket.getId();
     }
 
-    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
+    @GetMapping("/delete/{ticketId}")
     public String deleteTicket(@PathVariable("ticketId") long ticketId) {
         if (this.ticketDatabase.containsKey(ticketId)) {
             this.ticketDatabase.remove(ticketId);
