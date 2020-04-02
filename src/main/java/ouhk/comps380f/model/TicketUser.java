@@ -27,7 +27,7 @@ public class TicketUser implements Serializable {
 
     public TicketUser(String username, String password, String[] roles) {
         this.username = username;
-        this.password = password;
+        this.password = "{noop}" + password;
         for (String role : roles) {
             this.roles.add(new UserRole(this, role));
         }

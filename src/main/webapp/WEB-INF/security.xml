@@ -46,13 +46,16 @@
     <!-- Create default configuration for Hibernate -->
     <b:bean id="hibernateJpaVendorAdapter"
             class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    
     <!-- Configure the transaction manager bean -->
     <b:bean id="transactionManager"
             class="org.springframework.orm.jpa.JpaTransactionManager">
         <b:property name="entityManagerFactory" ref="entityManagerFactory"/>
     </b:bean>
+    
     <!-- Enable annotation driven transaction management -->
     <tx:annotation-driven/>
+    
     <!-- Configure base package of the repository interfaces -->
     <jpa:repositories base-package="ouhk.comps380f.dao"/>
     
