@@ -2,6 +2,10 @@ package ouhk.comps380f.controller;
 
 import java.io.IOException;
 import javax.annotation.Resource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +21,11 @@ import ouhk.comps380f.model.TicketUser;
 @Controller
 @RequestMapping("/user")
 public class TicketUserController {
+
+    private final Logger logger = LogManager.getLogger(this.getClass());
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Resource
     TicketUserRepository ticketUserRepo;
@@ -66,15 +75,17 @@ public class TicketUserController {
     @PostMapping("/create")
     public View create(Form form) throws IOException {
         TicketUser user = new TicketUser(form.getUsername(),
-                form.getPassword(), form.getRoles()
+                passwordEncoder.encode(form.getPassword()), form.getRoles()
         );
         ticketUserRepo.save(user);
+        logger.info("User " + form.getUsername() + " created.");
         return new RedirectView("/user/list", true);
     }
 
     @GetMapping("/delete/{username}")
     public View deleteTicket(@PathVariable("username") String username) {
         ticketUserRepo.delete(ticketUserRepo.findById(username).orElse(null));
+        logger.info("User " + username + " deleted.");
         return new RedirectView("/user/list", true);
     }
 }
