@@ -21,4 +21,5 @@
         <property name="suffix" value=".jsp" />
     </bean>
     
+    <bean id="userValidator" class="ouhk.comps380f.validator.UserValidator" />
 </beans>
